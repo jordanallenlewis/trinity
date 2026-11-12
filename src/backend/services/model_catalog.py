@@ -103,14 +103,16 @@ class ModelEntry:
 
 # The ordered catalog. Order is preserved into the picker and the admin dropdown.
 # Model ids verified against the ``claude-api`` skill (do not state ids from
-# memory): ``claude-opus-5-5`` is the current Opus tier and ``claude-opus-5`` the
-# prior point release within it (still served, still selectable); the ``-5``
-# family and ``claude-sonnet-4-6`` are current; ``opus-4-8/4-7/4-6`` are the
-# prior Opus generation (legacy). The date-suffixed ids are kept verbatim.
+# memory): ``claude-opus-5-5``, ``claude-sonnet-5-5``, ``claude-fable-5-2`` and
+# ``claude-haiku-5-5`` are the current tier of each family, and ``claude-opus-5``,
+# ``claude-sonnet-5`` and ``claude-fable-5-1`` the prior point releases within
+# them (still served, still selectable); ``claude-fable-5`` and
+# ``claude-sonnet-4-6`` are current; ``opus-4-8/4-7/4-6`` are the prior Opus
+# generation (legacy). The date-suffixed ids are kept verbatim.
 #
 # Canonical lineup (keep this comment as the bump-anchor):
 #     https://platform.claude.com/docs/en/about-claude/models/overview
-# Last synced: 2026-09-23 (#2987 — Claude Opus 5.5)
+# Last synced: 2026-11-12 (Claude Sonnet 5.5, Claude Haiku 5.5, Claude Fable 5.2)
 MODEL_CATALOG: tuple[ModelEntry, ...] = (
     # Current generation.
     ModelEntry(
@@ -137,9 +139,20 @@ MODEL_CATALOG: tuple[ModelEntry, ...] = (
         False,
     ),
     ModelEntry(
+        "claude-fable-5-2",
+        "Claude Fable 5.2",
+        "Most capable \u2014 longest tasks (latest)",
+        True,
+        True,
+        False,
+        min_claude_code="2.1.321",
+    ),
+    # Prior point release in the Fable tier: keeps both selectable flags and
+    # loses only the "(latest)" marker, as claude-opus-5 did in #2987.
+    ModelEntry(
         "claude-fable-5-1",
         "Claude Fable 5.1",
-        "Most capable \u2014 longest tasks (latest)",
+        "Most capable \u2014 longest tasks (prior point release)",
         True,
         True,
         False,
@@ -153,14 +166,26 @@ MODEL_CATALOG: tuple[ModelEntry, ...] = (
         False,
     ),
     ModelEntry(
-        "claude-sonnet-5",
-        "Claude Sonnet 5",
+        "claude-sonnet-5-5",
+        "Claude Sonnet 5.5",
         "Fast + smart, 1M context (latest)",
         True,
         True,
         False,
         workspace=True,
         workspace_tier="Balanced \u2014 fast and smart",
+        min_claude_code="2.1.284",
+    ),
+    # Prior point release in the Sonnet tier: keeps both selectable flags and
+    # loses the "(latest)" marker and the Workspace "Balanced" slot, which is
+    # one option, not a list (ent#403).
+    ModelEntry(
+        "claude-sonnet-5",
+        "Claude Sonnet 5",
+        "Fast + smart, 1M context (prior point release)",
+        True,
+        True,
+        False,
     ),
     # Prior Opus generation — still selectable, relabelled Legacy (#2086).
     ModelEntry(
@@ -172,16 +197,27 @@ MODEL_CATALOG: tuple[ModelEntry, ...] = (
     ModelEntry(
         "claude-sonnet-4-6", "Claude Sonnet 4.6", "Fast + smart", True, True, True
     ),
-    # Public-channel-selectable but NOT an admin default (#1080).
+    # Public-channel-selectable but NOT an admin default (#1080). Haiku 5.5
+    # takes the Workspace "Fastest" slot; Haiku 4.5 stays selectable as the
+    # prior generation.
     ModelEntry(
-        "claude-haiku-4-5-20251001",
-        "Claude Haiku 4.5",
-        "Fastest, cheapest",
+        "claude-haiku-5-5",
+        "Claude Haiku 5.5",
+        "Fastest, cheapest (latest)",
         True,
         False,
         False,
         workspace=True,
         workspace_tier="Fastest",
+        min_claude_code="2.1.293",
+    ),
+    ModelEntry(
+        "claude-haiku-4-5-20251001",
+        "Claude Haiku 4.5",
+        "Fastest, cheapest (prior generation)",
+        True,
+        False,
+        False,
     ),
     # Legacy, picker-only (neither public-channel nor admin-default).
     ModelEntry(

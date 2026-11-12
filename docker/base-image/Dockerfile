@@ -167,7 +167,7 @@ RUN git config --system gc.auto 0 && \
 # what actually upgrades the CLI. `MODEL_CATALOG[*].min_claude_code`
 # (src/backend/services/model_catalog.py) must not exceed this value;
 # tests/unit/test_3012_claude_code_pin.py fails the build when it does.
-ARG CLAUDE_CODE_VERSION=2.1.281
+ARG CLAUDE_CODE_VERSION=2.1.322
 RUN set -eu; \
     npm install -g --include=optional --no-ignore-scripts --foreground-scripts \
         "@anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}"; \

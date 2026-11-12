@@ -52,3 +52,20 @@ def test_pinned_version_satisfies_every_catalog_minimum(entry):
 def test_opus_5_5_declares_its_minimum():
     opus = next(m for m in MODEL_CATALOG if m.id == "claude-opus-5-5")
     assert opus.min_claude_code == "2.1.280"
+
+
+@pytest.mark.parametrize(
+    "model_id,minimum",
+    [
+        # The Claude Code release that added each model (its CHANGELOG):
+        # 2.1.284 Sonnet 5.5, 2.1.293 Haiku 5.5, 2.1.321 Fable 5.2. An older CLI
+        # refuses the id, and its `sonnet` / `haiku` / `fable` aliases resolve to
+        # the previous release, so the pin must clear all three.
+        ("claude-sonnet-5-5", "2.1.284"),
+        ("claude-haiku-5-5", "2.1.293"),
+        ("claude-fable-5-2", "2.1.321"),
+    ],
+)
+def test_current_point_releases_declare_their_minimum(model_id, minimum):
+    entry = next(m for m in MODEL_CATALOG if m.id == model_id)
+    assert entry.min_claude_code == minimum
